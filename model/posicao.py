@@ -2,7 +2,7 @@ class Posicao():
     def __init__(self,x, y):
         self.__x = x
         self.__y = y
-        self.ocupada = False
+        self.__ocupada = False
         self.__epique = False
 
     @property
@@ -13,11 +13,13 @@ class Posicao():
     def y(self):
         return self.__y
 
-    def ocupa_posicao(self):
-        self.ocupada = True
+    @property
+    def ocupada(self):
+        return self.__ocupada
 
-    def desocupa_posicao(self):
-        self.ocupada = False
+    @ocupada.setter
+    def ocupada(self,newValue:bool):
+        self.__ocupada = newValue
 
     @property
     def epique(self):
