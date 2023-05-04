@@ -2,6 +2,7 @@ from model.posicao import Posicao
 import tkinter as tk
 from model.pieces import Peca
 from PIL import Image, ImageDraw, ImageTk
+from .Viewpecas import ViewPiece
 
 class Board(tk.Toplevel, Posicao,Peca):
     def __init__(self, parent, rows=12, columns=8, size=30, color1="#CCE5FF", color2="#FFCCE5", border_color="#000000",
@@ -23,6 +24,7 @@ class Board(tk.Toplevel, Posicao,Peca):
         self.__pique2 = [(10, 3), (10, 4), (11, 3), (11, 4)]
         self.__time1 = [(0, 2), (1, 2), (2, 2), (2, 3), (2, 4), (2, 5), (1, 5), (0, 5)]
         self.__time2 = [(11, 2), (10, 2), (9, 2), (9, 3), (9, 4), (9, 5), (11, 5), (10, 5)]
+        self.viewPiece = ViewPiece(self.__posicoes,self.__pieces)
 
         for row in range(self.rows):
             for column in range(self.columns):
@@ -63,6 +65,9 @@ class Board(tk.Toplevel, Posicao,Peca):
     def get_cell(self, row, column):
         return self.rectangles[row, column]
 
+    def set_color(self, row, column, color):
+        rectangle = self.rectangles[row, column]
+        rectangle.config(bg=color)
 
     def cria_pecas(self):
         id = 0
@@ -81,11 +86,6 @@ class Board(tk.Toplevel, Posicao,Peca):
 
             id +=1
 
-
-
-    def set_color(self, row, column, color):
-        rectangle = self.rectangles[row, column]
-        rectangle.config(bg=color)
 
     def desenha_peca(self, row, column, color):
         x = column * self.size + self.size // 2
