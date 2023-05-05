@@ -72,20 +72,16 @@ class Board(tk.Toplevel, Posicao,Peca):
     def cria_pecas(self):
         id = 0
         for i in self.__time1:
-            self.__posicoes[f"{i}"].ocupada = True
-            self.__pieces[id] = Peca(id,1,self.__posicoes[f"{i}"])
-            self.desenha_peca(i[0],i[1],'#4a46ff')
+            self.__posicoes.get(f"{i}").ocupada = True
+            self.__pieces[f"{i[0]},{i[1]}"] = Peca(id, 1, f"{i[0]},{i[1]}")
+            self.desenha_peca(i[0], i[1], '#4a46ff')
             id += 1
 
-            print(i)
         for i in self.__time2:
-            self.__posicoes[f"{i}"].ocupada = True
-            self.__pieces[id] = Peca(id,1,self.__posicoes[f"{i}"])
-
-            self.desenha_peca(i[0],i[1],'#ff0084')
-
-            id +=1
-
+            self.__posicoes.get(f"{i}").ocupada = True
+            self.__pieces[f"{i[0]},{i[1]}"] = Peca(id, 2, f"{i[0]},{i[1]}")
+            self.desenha_peca(i[0], i[1], '#ff0084')
+            id += 1
 
     def desenha_peca(self, row, column, color):
         x = column * self.size + self.size // 2
@@ -93,7 +89,7 @@ class Board(tk.Toplevel, Posicao,Peca):
         radius = self.size // 2 - 2
 
         # cria uma imagem de um círculo
-        image = Image.new('RGBA', (radius * 2, radius * 2), (255, 255, 255, 0))
+        image = Image.new('RGBA', (radius * 2, radius * 2), '#fff')
         draw = ImageDraw.Draw(image)
         draw.ellipse((0, 0, radius * 2, radius * 2), fill=color)
 
@@ -103,4 +99,43 @@ class Board(tk.Toplevel, Posicao,Peca):
         # cria um label com a imagem do círculo
         peca = tk.Label(self, image=photo_image, bd=self.border_width, bg=self['bg'])
         peca.image = photo_image
+
+        # adiciona os atributos row e column ao widget peca
+        peca.row = row
+        peca.column = column
+        peca.color = color
+
+        # adiciona o manipulador de eventos para o clique na peça
+        peca.bind("<Button-1>", lambda event, peca=peca: self.muda_cor_peca(event))
+
+        # posiciona a peça no tabuleiro
         peca.place(x=x - radius, y=y - radius)
+        self.__pieces[f"{row},{column}"] = peca
+
+    def muda_cor_peca(self, event):
+        peca = event.widget
+        row, column = peca.row, peca.column
+
+        # obtém a cor original da peça clicada
+        original_color = peca.color
+
+        peca.configure(bg='#eee', highlightthickness=0)  # define a cor de fundo para cinza claro
+        peca.color = '#eee'  # atualiza a cor da peça
+
+        # atualiza as cores das outras peças do tabuleiro
+        self.atualiza_tabuleiro(original_color)
+
+        # atualiza a cor original da peça clicada
+        peca.color = '#eee'
+    def on_click(event, position):
+        print(f"A peça na posição {position} foi clicada.")
+
+        # adiciona a função de callback para o evento de clique
+
+    def atualiza_tabuleiro(self, original_color):
+        for peca in self.__pieces.values():
+            if isinstance(peca, tk.Label) and peca is not None:
+                if peca.color == original_color:
+                    peca.configure(bg='red', highlightthickness=0)
+                else:
+                    peca.configure(bg='blue', highlightthickness=0)

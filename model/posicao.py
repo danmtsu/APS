@@ -5,21 +5,22 @@ class Posicao():
         self.__ocupada = False
         self.__epique = False
 
-    @property
-    def x(self):
-        return self.__x
-
-    @property
-    def y(self):
-        return self.__y
 
     @property
     def ocupada(self):
         return self.__ocupada
 
     @ocupada.setter
-    def ocupada(self,newValue:bool):
-        self.__ocupada = newValue
+    def ocupada(self,newvalue):
+        self.__ocupada = newvalue
+    def x(self):
+        return self.__x
+
+    def y(self):
+        return self.__y
+
+    def altera_ocupada(self):
+        self.__ocupada = not self.__ocupada
 
     @property
     def epique(self):

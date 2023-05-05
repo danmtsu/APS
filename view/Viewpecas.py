@@ -15,10 +15,12 @@ class ViewPiece:
         id = 0
         for i in self.__time1:
             self.__posicoes[f"{i}"].ocupada = True
+            self.__posicoes[f"{i}"].altera_ocupada()
+            print(self.__posicoes[f"{i}"].ocupada)
             self.__pieces[id] = Peca(id,1,self.__posicoes[f"{i}"])
             self.desenha_peca(i[0],i[1],'#4a46ff')
-            self.desenha_peca(i[0],i[1],'#4a46ff')
             id += 1
+            self.__id = id
 
         for i in self.__time2:
             self.__posicoes[f"{i}"].ocupada = True
@@ -45,3 +47,6 @@ class ViewPiece:
         peca = tk.Label(image=photo_image, bd=self.border_width, bg=self['bg'])
         peca.image = photo_image
         peca.place(x=x - radius, y=y - radius)
+
+    def __str__(self):
+        return str(self.__id)
